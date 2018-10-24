@@ -1,0 +1,55 @@
+<html>
+<head>
+<title>visitkorea</title>
+</head>
+<body>
+<form>
+	<select name='f'>
+	  {% for key in d['fs'] %}
+		<option value='{{ key }}'
+              {% if (key == d['f']) %}
+                selected='selected'
+              {% endif %}
+>{{ key }}</option>
+	  {% endfor %}
+	</select>
+	<input type='text' name='v' value='{{ d['v'] }}' size='120' />
+</form>
+<table border='1'>
+	<thead>
+		<tr><th>s</th>
+		    <th>p</th>
+		    <th>ot</th>
+		    <th>ov</th>
+		    <th>ol</th>
+		</tr>
+	</thead>
+	<tbody>
+	  {% for row in d['rows'] %}
+	      <tr>
+		      <td>
+			      {{ row['s'] }}
+			      | <a href="?f=s&v={{ d['quote_plus'](row['s']) }}">S</a>
+			      | <a href="?f=p&v={{ d['quote_plus'](row['s']) }}">P</a>
+			      | <a href="?f=ov&v={{ d['quote_plus'](row['s']) }}">O</a>
+		      </td>
+		      <td>{{ row['p'] }}
+			      | <a href="?f=s&v={{ d['quote_plus'](row['p']) }}">S</a>
+			      | <a href="?f=p&v={{ d['quote_plus'](row['p']) }}">P</a>
+			      | <a href="?f=ov&v={{ d['quote_plus'](row['p']) }}">O</a>
+                      </td>
+		      <td>{{ row['ot'] }}</td>
+		      <td>{% if row['ov'] %}
+			      {{ row['ov'] }}
+			      | <a href="?f=s&v={{ d['quote_plus'](row['ov']) }}">S</a>
+			      | <a href="?f=p&v={{ d['quote_plus'](row['ov']) }}">P</a>
+			      | <a href="?f=ov&v={{ d['quote_plus'](row['ov']) }}">O</a>
+			  {% endif %}
+		      </td>
+		      <td>{{ row['ol'] }}</td>
+	      </tr>
+	  {% endfor %}
+	 </tbody>
+ </table>
+</body>
+</html>
