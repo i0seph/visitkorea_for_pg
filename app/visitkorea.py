@@ -16,10 +16,13 @@ def hello_world():
     f = request.args.get('f', 's').strip()
     v = request.args.get('v', '<http://data.visitkorea.or.kr/>').strip()
 
-    d = {}
-    d['f'] = f
+    d = {}    
     d['v'] = v
     d['fs'] = ('s', 'p', 'ot', 'ov')
+    
+    if f not in d['fs']:
+        f = 's'
+    d['f'] = f
 
     conn = psycopg2.connect('user=postgres port=5432 host=/tmp')
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
