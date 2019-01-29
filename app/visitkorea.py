@@ -12,6 +12,7 @@ import psycopg2.extras
 from urllib.parse import quote_plus
 from flask_sqlalchemy import SQLAlchemy
 from pprint import pprint
+import inspect
 
 
 app = Flask(__name__)
@@ -77,9 +78,8 @@ def category_list(uptour = ''):
 
 @app.route('/ajax/random10/')
 def random_list():
-    query = "select distinct a.place_id, a.place_name, first_value(c.imgurl) over (partition by a.place_id) as imgurl \
-        from place a, (select place_id from place order by random() limit 20) b left join place_images c on b.place_id = c.place_id where a.place_id = b.place_id"
-    d = sql(query)
+    mod = __import__('sql_' + inspect.stack()[0][3] , fromlist=['sql_' + inspect.stack()[0][3]])
+    d = sql(mod.query)
     return jsonify([dict(row) for row in d.fetchall()])
 
 @app.route('/ajax/list/<locaval>/<cateval>')
