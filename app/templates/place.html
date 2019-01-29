@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block pagetitle %}
+{{ d.place_name }} - 대한민국 구석구석
+{% endblock %}
+{% block maintitle %}
+<div onclick='self.location.href="/"' style='cursor: pointer'>대한민국 구석구석</div>
+<h1>{{ d.place_name }}</h1>
+{% endblock %}
+{% block placeview %}
+<dl id='placedl'>
+	<dt>지역</dt>
+	<dd id='placelocation'>{{ d.loca }}</dd>
+	<dt>종류</dt>
+	<dd id='placecategory'>{{ d.cate }}</dd>
+	<dt>설명</dt>
+	<dd>{{ d.descript }}</dd>
+	<dt>지도</dt>
+	<dd>{{ d.long }}, {{ d.lat }}<br />
+	<div id='place_images' style='float: left;margin-right: 30px;margin-bottom:20px'></div>
+	<div id="map" style="width:600px;height:400px;"></div><div style='clear:both'></div></dd>
+</dl>
+
+<div>인근 장소 및 이벤트</div>
+<div id='nearlist'>
+
+</div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8145890c387467213cfd472a9a98d880"></script>
+{% if d.lat and d.long %}
+<script>
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+    mapOption = { 
+	center: new daum.maps.LatLng({{ d.lat }}, {{ d.long }}),
+	level: 11 // 지도의 확대 레벨
+    };
+
+// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+var map = new daum.maps.Map(mapContainer, mapOption); 
+var zoomControl = new daum.maps.ZoomControl();
+map.addControl(zoomControl, daum.maps.ControlPosition.RIGHT);
+
+// set marker
+var markerPosition  = new daum.maps.LatLng({{ d.lat }}, {{ d.long }});
+var marker = new daum.maps.Marker({ position: markerPosition });
+marker.setMap(map);
+</script>
+{% endif %}
+{% endblock %}
+{% block javascript %}
+$(document).ready(startplace({{ d.place_id}}, {{ 0 if d.long == None else d.long }}, {{ 0 if d.lat == None else d.lat }}));
+{% endblock %}

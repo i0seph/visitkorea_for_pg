@@ -1,55 +1,14 @@
-<html>
-<head>
-<title>visitkorea</title>
-</head>
-<body>
-<form>
-	<select name='f'>
-	  {% for key in d['fs'] %}
-		<option value='{{ key }}'
-              {% if (key == d['f']) %}
-                selected='selected'
-              {% endif %}
->{{ key }}</option>
-	  {% endfor %}
-	</select>
-	<input type='text' name='v' value='{{ d['v'] }}' size='120' />
-</form>
-<table border='1'>
-	<thead>
-		<tr><th>s</th>
-		    <th>p</th>
-		    <th>ot</th>
-		    <th>ov</th>
-		    <th>ol</th>
-		</tr>
-	</thead>
-	<tbody>
-	  {% for row in d['rows'] %}
-	      <tr>
-		      <td>
-			      {{ row['s'] }}
-			      | <a href="?f=s&v={{ d['quote_plus'](row['s']) }}">S</a>
-			      | <a href="?f=p&v={{ d['quote_plus'](row['s']) }}">P</a>
-			      | <a href="?f=ov&v={{ d['quote_plus'](row['s']) }}">O</a>
-		      </td>
-		      <td>{{ row['p'] }}
-			      | <a href="?f=s&v={{ d['quote_plus'](row['p']) }}">S</a>
-			      | <a href="?f=p&v={{ d['quote_plus'](row['p']) }}">P</a>
-			      | <a href="?f=ov&v={{ d['quote_plus'](row['p']) }}">O</a>
-                      </td>
-		      <td>{{ row['ot'] }}</td>
-		      <td>{% if row['ov'] %}
-			      {{ row['ov'] }}
-			      | <a href="?f=s&v={{ d['quote_plus'](row['ov']) }}">S</a>
-			      | <a href="?f=p&v={{ d['quote_plus'](row['ov']) }}">P</a>
-			      | <a href="?f=ov&v={{ d['quote_plus'](row['ov']) }}">O</a>
-			  {% endif %}
-		      </td>
-		      <td>{{ row['ol'] }}</td>
-	      </tr>
-	  {% endfor %}
-	 </tbody>
- </table>
-</body>
-</html>
+{% extends "layout.html" %}
+{% block category %}
+<dl>
+	<dt>이름 검색:</dt><dd><input type='text' name='input_search' id='input_search' size='80' /></dd>
+	<dt>지역 선택:</dt><dd><ul id='locanavi' class='naviul'></ul></dd>
+	<dt>하위 지역:</dt><dd><ul id='sublocanavi' class='naviul'></ul></dd>
+	<dt>종류 선택:</dt><dd><ul id='catenavi' class='naviul'></ul></dd>
+</dl>
+{% endblock %}
+{% block placelist %}
+<div>여기 어때요?</div>
+<ul id='placelist'>
+</ul>
+{% endblock %}

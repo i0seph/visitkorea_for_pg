@@ -1,0 +1,33 @@
+@charset "utf-8";
+
+.naviul {
+	display:inline-block;
+	list-style: none;
+}
+.naviul li, #placelist li {
+	float: left;
+	margin-right: 10px;
+}
+
+#placelist li {
+	cursor: pointer;
+}
+
+#placedl {
+	line-height: 1.8;
+}
+
+#placedl dt {
+	float: left;
+	width: 150px;
+	text-align: right;
+}
+#placedl dd {
+	margin-left: 180px;
+}
+
+#nearlist div {
+	margin-left: 20px;
+	margin-top: 20px;
+	float: left;
+}
