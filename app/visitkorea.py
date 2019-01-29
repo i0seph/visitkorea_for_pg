@@ -69,16 +69,16 @@ def get_images(place_id):
 @app.route('/ajax/location/')
 @app.route('/ajax/location/<upaddr>')
 def location_list(upaddr = ''):
-    query = "select addrid,addrname from addrcodes where upaddr = :upaddr order by 1"
-    d = sql(query, {'upaddr': upaddr});
+    mod = __import__('sql_' + inspect.stack()[0][3] , fromlist=['sql_' + inspect.stack()[0][3]])
+    d = sql(mod.query, {'upaddr': upaddr});
     return jsonify([dict(row) for row in d.fetchall()])
 
 @app.route('/ajax/category')
 @app.route('/ajax/category/')
 @app.route('/ajax/category/<uptour>')
 def category_list(uptour = ''):
-    query = "select tourid,tourname from tourism where uptour = :uptour order by 1"
-    d = sql(query, {'uptour': uptour});
+    mod = __import__('sql_' + inspect.stack()[0][3] , fromlist=['sql_' + inspect.stack()[0][3]])
+    d = sql(mod.query, {'uptour': uptour});
     return jsonify([dict(row) for row in d.fetchall()])
 
 @app.route('/ajax/random10/')
