@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+'''
+Copyright(c) 2019. KTDS Opensource Business Team. All rights reserved.
+Author: Ioseph
+이 저작물은 크리에이티브 커먼즈 저작자표시-비영리 4.0 국제 라이선스에 따라 이용할 수 있습니다.
+'''
 import os
 from flask import Flask
 from flask import render_template

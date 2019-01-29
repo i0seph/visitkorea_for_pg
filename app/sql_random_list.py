@@ -1,3 +1,7 @@
 # -*- coding: utf-8 -*-
-query = "select distinct a.place_id, a.place_name, first_value(c.imgurl) over (partition by a.place_id) as imgurl \
-        from place a, (select place_id from place order by random() limit 20) b left join place_images c on b.place_id = c.place_id where a.place_id = b.place_id"
+query = """
+select 
+	128981 as place_id, 
+	'관방제림' as place_name, 
+	'http://tong.visitkorea.or.kr/cms/resource/02/1606902_image2_1.jpg' as imgurl
+"""
