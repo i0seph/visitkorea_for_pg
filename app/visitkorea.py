@@ -23,7 +23,7 @@ import inspect
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = '9b1780f7bce9960bfefc34f0d52f0690'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost:5432/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres@localhost:5432/postgres'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
