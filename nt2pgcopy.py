@@ -1,16 +1,17 @@
 #!/usr/bin/python
-# for python 2.7
+# for python 3.x
 
 import sys
 import re
-reload(sys)
-sys.setdefaultencoding('utf-8')
+#reload(sys)
+#sys.setdefaultencoding('utf-8')
 
 
-#print 'test \\u0259'.decode('unicode-escape')
+#print ('test str.encode(\\u0259').decode('unicode-escape'))
 
 fh = open(sys.argv[1],'r')
 
+newfh = open(sys.argv[2],'w', encoding='utf-8')
 
 i = 0;
 while(1):
@@ -26,7 +27,7 @@ while(1):
         cr = c[e+3:]
         clang = ""
         if cr.find("XMLSchema#string") > 0:
-            cl = cl.decode("unicode-escape")
+            cl = str.encode(cl).decode("unicode-escape")
             cl = cl.replace('\n','\\n')
     elif re.match('^<.+>$', c):
         cl = ""
@@ -40,14 +41,14 @@ while(1):
         else:
             if c.find('"@') > 0:
                 cl = c[1:c.find('"@')]
-                cl = cl.decode("unicode-escape")
+                cl = str.encode(cl).decode("unicode-escape")
                 cl = cl.replace('\n','\\n')
                 cr = ""
                 clang = c[c.find('"@')+2:]
             else:
                 clang = ""
                 cl = c[1:-1]
-                cl = cl.decode("unicode-escape")
+                cl = str.encode(cl).decode("unicode-escape")
                 cl = cl.replace('\n','\\n')
                 cr = ""
-    print "%s\t%s\t%s\t%s\t%s" % (a, b, cl, cr, clang)
+    newfh.write ("%s\t%s\t%s\t%s\t%s\n" % (a, b, cl, cr, clang))
