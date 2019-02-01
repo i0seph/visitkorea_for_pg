@@ -83,7 +83,8 @@ update addrcodes set upaddr = '' where upaddr is null;
 ```sql
 select * from visitkorea where 
 s like '<http://data.visitkorea.or.kr/ontology/%>' 
-and p in ('<http://www.w3.org/2000/01/rdf-schema#subClassOf>' , '<http://www.w3.org/2002/07/owl#equivalentClass>')
+and p in ('<http://www.w3.org/2000/01/rdf-schema#subClassOf>' 
+          , '<http://www.w3.org/2002/07/owl#equivalentClass>')
 
 
 select * from visitkorea where s = '<http://data.visitkorea.or.kr/ontology/Event>'
