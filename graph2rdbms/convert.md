@@ -79,4 +79,31 @@ FROM   visitkorea a
 update addrcodes set upaddr = '' where upaddr is null;
 ```
 
+## visitkorea 테이블에서 ontology 뽑기
+```sql
+select * from visitkorea where 
+s like '<http://data.visitkorea.or.kr/ontology/%>' 
+and p in ('<http://www.w3.org/2000/01/rdf-schema#subClassOf>' , '<http://www.w3.org/2002/07/owl#equivalentClass>')
+
+
+select * from visitkorea where s = '<http://data.visitkorea.or.kr/ontology/Event>'
+select * from visitkorea where s = '<http://data.visitkorea.or.kr/ontology/Musical>'
+select * from visitkorea where ov  = '<http://data.visitkorea.or.kr/ontology/Event>'
+
+with recursive t as (
+select *,to_char(row_number() over (order by s), 'FM00000000') as level from visitkorea 
+	where s like '<http://data.visitkorea.or.kr/ontology/%' 
+	and p = '<http://www.w3.org/2002/07/owl#equivalentClass>'
+union all
+select a.*, t.level || to_char(row_number() over (order by a.s), 'FM00000000')
+	from visitkorea a, t 
+	where a.s like '<http://data.visitkorea.or.kr/ontology/%' 
+	and a.p = '<http://www.w3.org/2000/01/rdf-schema#subClassOf>' and a.ov = t.s
+)
+select t.s,repeat(' ',length(t.level) - 8) || a.ot as ot,t.ov from t, visitkorea a 
+where t.s = a.s and a.p = '<http://www.w3.org/2000/01/rdf-schema#label>' and a.ol in ('','ko')
+-- and a.s like '<http://data.visitkorea.or.kr/ontology/%>'
+order by t.level
+```
+
 ## visitkorea 테이블에서 지역 테이블 뽑기
