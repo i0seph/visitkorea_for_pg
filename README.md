@@ -28,28 +28,3 @@
        * CREATE INDEX visitkorea_ov_i ON visitkorea (ov) WHERE (ov <> '');
        * CREATE INDEX visitkorea_s_i ON visitkorea (s);
        * CREATE INDEX visitkorea_v_i ON visitkorea (p);
-
-## visitkorea 테이블에서 관광 카테고리 테이블 추가
-```sql
-CREATE TABLE public.tourism (
-    tourid text NOT NULL PRIMARY KEY,
-    tname text,
-    upid text
-);
-INSERT INTO tourism
-SELECT Replace(Replace(a.s, '<http://data.visitkorea.or.kr/resource/', ''), '>',
-       '') AS s,
-       a.ot,
-       Replace(Replace(c.ov, '<http://data.visitkorea.or.kr/resource/', ''), '>'
-       , '')
-            AS ov
-FROM   visitkorea a 
-       JOIN visitkorea b
-         ON b.ov = '<http://data.visitkorea.or.kr/resource/TourismScheme>'
-            AND b.p = '<http://www.w3.org/2004/02/skos/core#inScheme>'
-            AND a.s = b.s
-            AND a.p = '<http://www.w3.org/2000/01/rdf-schema#label>'
-       LEFT OUTER JOIN visitkorea c
-                    ON a.s = c.s
-                       AND c.p = '<http://www.w3.org/2004/02/skos/core#broader>';
-```
