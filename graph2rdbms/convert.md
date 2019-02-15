@@ -108,3 +108,21 @@ order by t.level
 ```
 
 ## visitkorea 테이블에서 지역 테이블 뽑기
+
+## 자료 보정
+```sql
+insert into tourism values ('B01', '교통', '');
+insert into tourism values ('B0102', '교통시설', 'B01');
+insert into tourism values ('B01020100', '공항', 'B0102');
+insert into tourism values ('B01020200', '기차역', 'B0102');
+
+update place set cate = 'A05020100' where place_id = 2521792;
+update place set cate = 'A05020300' where place_id = 2521793;
+update place set cate = 'A05020100' where place_id = 2521797;
+update place set cate = 'A02030200' where place_id = 2518763;
+update place set cate = 'B01020200' where place_id = 2398659;
+update place set cate = 'B01020200' where place_id = 1964662;
+update place set cate = null where place_id in (125387, 125357, 1989182);
+update place set cate = 'A01010500' where place_id in (2518600);
+update place set cate = null where place_id in (2518566);
+```
