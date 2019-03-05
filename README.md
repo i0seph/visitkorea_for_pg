@@ -17,7 +17,7 @@
    1. pip install -r requirements.txt
    1. wget -O visitkorea.nt.gz http://data.visitkorea.or.kr/download/dataset
    1. gzip -d visitkorea.nt.gz
-   1. python3 nt2pgcopy.py visitkorea.nt vistkorea.pg
+   1. python3 nt2pgcopy.py visitkorea.nt visitkorea.pg
    1. psql -c "create table visitkorea (s text, p text, ot text, ov text, ol text)"
    1. psql -c "\\copy visitkorea from 'visitkorea.pg'"
    1. cd app
