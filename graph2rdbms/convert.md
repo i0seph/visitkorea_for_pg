@@ -108,6 +108,22 @@ order by t.level
 ```
 
 ## visitkorea 테이블에서 지역 테이블 뽑기
+```sql
+select s, ot from visitkorea 
+where s ~ '<http://data.visitkorea.or.kr/resource/[0-9]+' 
+  and p = '<http://www.w3.org/2000/01/rdf-schema#label>';
+-- s 는 place_id int, ot 는 place_name varchar(80) 으로 place 테이블을 만들고, 이 자료를 입력
+alter table place add long numeric;
+alter table place add lat numeric;
+select s, ot from visitkorea 
+where s ~ '<http://data.visitkorea.or.kr/resource/[0-9]+' 
+  and p = '<http://www.w3.org/2003/01/geo/wgs84_pos#lat>';
+select s, ot from visitkorea 
+where s ~ '<http://data.visitkorea.or.kr/resource/[0-9]+' 
+  and p = '<http://www.w3.org/2003/01/geo/wgs84_pos#long>';
+update place a set long = b.ot from (...) b where a.place_id = b.place_id;
+update place a set lat = b.ot from (...) b where a.place_id = b.place_id;
+```
 
 ## 자료 보정
 ```sql
