@@ -132,6 +132,34 @@ p  = '<http://xmlns.com/foaf/0.1/depicts>'
 ```sql
 p  = '<http://www.w3.org/2002/07/owl#sameAs>'
 ```
+## attnames 테이블 
+```sql
+select s from visitkorea 
+where p = '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>' 
+and ov = '<http://www.w3.org/2002/07/owl#DatatypeProperty>' 
+and s like '<http://data.visitkorea.or.kr/property/%';
+
+select p, count(*) as c 
+from visitkorea 
+where p like '<http://data.visitkorea.or.kr/property/%' 
+group by p;
+
+select a.s, a.ot, coalesce(b.c,0) 
+from visitkorea a 
+     left join (select p, count(*) as c 
+                from visitkorea 
+		where p like '<http://data.visitkorea.or.kr/property/%' 
+		group by p) b 
+     on a.s = b.p 
+where a.s in (select s from visitkorea 
+              where p = '<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>' 
+              and ov = '<http://www.w3.org/2002/07/owl#DatatypeProperty>' 
+              and s like '<http://data.visitkorea.or.kr/property/%') 
+and a.p = '<http://www.w3.org/2000/01/rdf-schema#label>' 
+and ol = 'ko' 
+order by 3 desc,1;
+```
+## 
 ## 자료 보정
 ```sql
 insert into tourism values ('B01', '교통', '');
