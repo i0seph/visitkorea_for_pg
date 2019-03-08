@@ -128,6 +128,10 @@ update place a set lat = b.ot from (...) b where a.place_id = b.place_id;
 ```sql
 p  = '<http://xmlns.com/foaf/0.1/depicts>'
 ```
+## place_links 테이블 정리
+```sql
+p  = '<http://www.w3.org/2002/07/owl#sameAs>'
+```
 ## 자료 보정
 ```sql
 insert into tourism values ('B01', '교통', '');
