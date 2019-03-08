@@ -124,7 +124,10 @@ where s ~ '<http://data.visitkorea.or.kr/resource/[0-9]+'
 update place a set long = b.ot from (...) b where a.place_id = b.place_id;
 update place a set lat = b.ot from (...) b where a.place_id = b.place_id;
 ```
-
+## place_images 테이블 정리
+```sql
+p  = '<http://xmlns.com/foaf/0.1/depicts>'
+```
 ## 자료 보정
 ```sql
 insert into tourism values ('B01', '교통', '');
