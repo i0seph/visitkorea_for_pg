@@ -6,7 +6,7 @@ Author: Ioseph
 '''
 import os
 from flask import Flask
-from flask import render_template
+from flask import abort, render_template
 from flask import request
 from flask import Response
 from flask import g
@@ -16,6 +16,7 @@ import psycopg2
 import psycopg2.extras
 from urllib.parse import quote_plus
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import SQLAlchemyError
 from pprint import pprint
 import inspect
 
@@ -32,13 +33,22 @@ def sql(rawSql, sqlVars={}):
     "Execute raw sql, optionally with prepared query"
     assert type(rawSql)==str
     assert type(sqlVars)==dict
-    res=db.session.execute(rawSql, sqlVars)
-    db.session.commit()
-    return res
+    try:
+        res=db.session.execute(rawSql, sqlVars)
+        db.session.commit()
+        return res
+    except SQLAlchemyError as e:
+        error = str(e.__dict__['orig'])
+        app.logger.error(error)
+        abort(500, description="Internal Error")
 
+@app.errorhandler(500)
+def page_not_found(error):
+    return render_template('error.html'), 500
 
 @app.route('/', methods=['POST', 'GET'])
 def start_page():
+    sql('select 1')
     d = {"title": "PostgreSQL + Flask + jquery 로 구축하는 대한민국 구석구석"}
     return render_template('index.html', d = d)
 
