@@ -18,7 +18,7 @@ def hello_world():
     d = {}
     d['f'] = f
     d['v'] = v
-    conn = psycopg2.connect('user=postgres port=5432 host=127.0.0.1 dbname=mydb')
+    conn = psycopg2.connect('user=postgres host=localhost')
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     query = "select s, p, case when ot <> '' then ot else ov end as ot, '' as ov, ol from visitkorea where {} = %s".format(f)
     cur.execute(query, (v,))
