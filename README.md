@@ -21,10 +21,18 @@
    1. psql -c "create table visitkorea (s text, p text, ot text, ov text, ol text)"
    1. psql -c "\\copy visitkorea from 'visitkorea.pg'"
    1. cd app
-   1. visitkorea.py 의 데이터베이스 접속 정보 수정 필요
-   1. python visitkorea.py
-1. http://localhost:8000 웹페이지로 자료 구경
+   1. visitkorea.py, ntviewer.py 의 데이터베이스 접속 정보 수정 필요
+   1. ntviewer.py - visitkorea 테이블 조회
+   1. visitkorea.py - 사용자용 응용 프로그램 샘플
+   1. python ntviewer.py
+1. visitkorea 테이블 구경하기
+   1. http://localhost:5000 웹페이지로 자료 구경
    1. PostgreSQL 쪽 인덱스가 필요함
        * CREATE INDEX visitkorea_ov_i ON visitkorea (ov) WHERE (ov <> '');
        * CREATE INDEX visitkorea_s_i ON visitkorea (s);
        * CREATE INDEX visitkorea_v_i ON visitkorea (p);
+1. 응용프로그램 웹 서비스 시작
+   1. python visitkorea.py
+   1. http://localhost:8000 
+   1. (SQL 교육용 샘플 코드임으로 당연히 실행되지 않습니다. 직접 다 만들어야 돌아갑니다!)
+   
