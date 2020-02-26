@@ -31,3 +31,52 @@
 	margin-top: 20px;
 	float: left;
 }
+
+/********************* slider overrides *********************/
+.bbslider-wrapper {
+  max-width: 100%;
+  /* ACB: // .prev-control-wrapper, .next-control-wrapper */ }
+  @media only screen and (max-width: 767px) {
+    .bbslider-wrapper {
+      padding: 0;
+      box-shadow: none;
+      border-radius: 0; } }
+  .bbslider-wrapper img {
+    max-width: 100%;
+    height: auto; }
+  .bbslider-wrapper:hover .prev-control-wrapper,
+  .bbslider-wrapper:hover .next-control-wrapper {
+    opacity: 1; }
+  .bbslider-wrapper .prev-control-wrapper,
+  .bbslider-wrapper .next-control-wrapper {
+    position: absolute;
+    top: 50%;
+    margin-top: -30px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 5;
+    line-height: 60px;
+    /* ACB: // .prev, .next */ }
+    .bbslider-wrapper .prev-control-wrapper .prev,
+    .bbslider-wrapper .prev-control-wrapper .next,
+    .bbslider-wrapper .next-control-wrapper .prev,
+    .bbslider-wrapper .next-control-wrapper .next {
+      display: block;
+      text-align: center;
+      width: 50px;
+      color: yellow;
+      text-shadow: 0 0 3px #999;
+      text-decoration: none;
+      /* ACB: // &:before */ }
+      .bbslider-wrapper .prev-control-wrapper .prev:before,
+      .bbslider-wrapper .prev-control-wrapper .next:before,
+      .bbslider-wrapper .next-control-wrapper .prev:before,
+      .bbslider-wrapper .next-control-wrapper .next:before {
+        line-height: 60px;
+        display: block;
+        font-size: 48px;
+        font-weight: 400; }
+  .bbslider-wrapper .prev-control-wrapper {
+    left: 0; }
+  .bbslider-wrapper .next-control-wrapper {
+    right: 0; }

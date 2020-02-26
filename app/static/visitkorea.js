@@ -158,8 +158,7 @@ function startplace(place_id, x, y){
 			$('#place_images').bbslider({
 				controls:   true,
 				transition: 'slide',
-				easing:     'easeInOutExpo',
-				duration:   500
+				duration:   500,
 			});
 		}
 	});
