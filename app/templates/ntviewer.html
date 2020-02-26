@@ -1,0 +1,48 @@
+<html>
+<head>
+<title>visitkorea</title>
+</head>
+<body>
+<form>
+	<select name='f'>
+		<option value='s'>s</option>
+		<option value='p'>p</option>
+		<option value='ot'>ot</option>
+		<option value='ov'>ov</option>
+	</select>
+	<input type='text' name='v' value='{{ d['v'] }}' size='120' />
+</form>
+<table border='1'>
+	<thead>
+		<tr><th>s</th>
+		    <th>p</th>
+		    <th>ot</th>
+		    <th>ol</th>
+		</tr>
+	</thead>
+	<tbody>
+	  {% for row in d['rows'] %}
+	      <tr>
+		      <td>
+			      {{ row['s'] }}
+			      | <a href="?f=s&v={{ d['quote_plus'](row['s']) }}">S</a>
+			      | <a href="?f=p&v={{ d['quote_plus'](row['s']) }}">P</a>
+			      | <a href="?f=ov&v={{ d['quote_plus'](row['s']) }}">O</a>
+		      </td>
+		      <td>{{ row['p'] }}
+			      | <a href="?f=s&v={{ d['quote_plus'](row['p']) }}">S</a>
+		              | <a href="?f=ov&v={{ d['quote_plus'](row['p']) }}">O</a></td>
+		      <td>{{ row['ot'] }}
+		      {% if row['ot'][0] == '<' %}
+			      | <a href="?f=s&v={{ d['quote_plus'](row['ot']) }}">S</a>
+			      | <a href="?f=p&v={{ d['quote_plus'](row['ot']) }}">P</a>
+			      | <a href="?f=ov&v={{ d['quote_plus'](row['ot']) }}">O</a>
+			  {% endif %}
+		      </td>
+		      <td>{{ row['ol'] }}</td>
+	      </tr>
+	  {% endfor %}
+	 </tbody>
+ </table>
+</body>
+</html>
