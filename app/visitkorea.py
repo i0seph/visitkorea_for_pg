@@ -38,13 +38,13 @@ def sql(rawSql, sqlVars={}):
         db.session.commit()
         return res
     except SQLAlchemyError as e:
-        error = str(e.__dict__['orig'])
+        error = "\n" + str(e.__dict__['orig'])
         app.logger.error(error)
-        abort(500, description="Internal Error")
+        abort(500, description=error)
 
 @app.errorhandler(500)
-def page_not_found(error):
-    return render_template('error.html'), 500
+def program_internal_error(description):
+    return render_template('error.html', error = description), 500
 
 @app.route('/', methods=['POST', 'GET'])
 def start_page():
