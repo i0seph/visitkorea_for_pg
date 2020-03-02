@@ -24,8 +24,8 @@
    1. visitkorea.py, ntviewer.py 의 데이터베이스 접속 정보 수정 필요
    1. ntviewer.py - visitkorea 테이블 조회
    1. visitkorea.py - 사용자용 응용 프로그램 샘플
-   1. python ntviewer.py
 1. visitkorea 테이블 구경하기
+   1. python ntviewer.py
    1. http://localhost:5000 웹페이지로 자료 구경
    1. PostgreSQL 쪽 인덱스가 필요함
        * CREATE INDEX visitkorea_ov_i ON visitkorea (ov) WHERE (ov <> '');
