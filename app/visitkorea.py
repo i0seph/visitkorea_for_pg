@@ -150,7 +150,9 @@ def get_cateloca_names(location,category):
     if location == "None":
         locaname = "미지정"
     else:
-        query = "with recursive t as (select * from addrcodes where addrid = :location union all select a.* from addrcodes a, t where a.addrid = t.upaddr ) select string_agg(addrname,' ') from (select * from t order by addrid) a"
+        query = "with recursive t as \
+		(select * from addrcodes where addrid = :location union all select a.* from addrcodes a, t where a.addrid = t.upaddr ) \
+		select string_agg(addrname,' ') from (select * from t order by addrid) a"
         res = sql(query, {'location': location})
         locaname = res.fetchone()[0];
 
