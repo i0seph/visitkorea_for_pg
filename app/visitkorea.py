@@ -139,10 +139,8 @@ def place_list(locaval, cateval):
 
 @app.route('/ajax/namesearch/<search_str>')
 def search_list(search_str):
-    query = "select distinct a.place_id, a.place_name, first_value(c.imgurl) over (partition by a.place_id) as imgurl \
-		    from place a, (select place_id from place where place_name like :search_str order by place_name limit 50) b \
-		    left join place_images c on b.place_id = c.place_id where a.place_id = b.place_id"
-    d = sql(query, {'search_str': '%' + search_str + '%'})
+    mod = __import__('sql_' + inspect.stack()[0][3] , fromlist=['sql_' + inspect.stack()[0][3]])
+    d = sql(mod.query)
     return jsonify([dict(row) for row in d.fetchall()])
 
 @app.route('/ajax/getnames/<location>/<category>')
