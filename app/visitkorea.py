@@ -46,6 +46,10 @@ def sql(rawSql, sqlVars={}):
 def program_internal_error(description):
     return render_template('error.html', error = description), 500
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 @app.route('/', methods=['POST', 'GET'])
 def start_page():
     sql('select 1')
@@ -54,24 +58,22 @@ def start_page():
 
 @app.route('/place/<int:place_id>')
 def view_resource(place_id):
-    query = "select * from place where place_id = :place_id"
+    mod = __import__('sql_' + inspect.stack()[0][3] , fromlist=['sql_' + inspect.stack()[0][3]])
+    query = mod.query
     d = sql(query, {'place_id': place_id})
     return render_template('place.html', d = d.fetchone())
 
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
-
 @app.route('/ajax/getattrib/<int:place_id>')
 def get_attribute(place_id):
-    query = "select b.attname, a.v from place_attrib a, attnames b where a.place_id = :place_id and a.attid = b.attid order by b.sortnum"
+    mod = __import__('sql_' + inspect.stack()[0][3] , fromlist=['sql_' + inspect.stack()[0][3]])
+    query = mod.query
     d = sql(query, {'place_id': place_id})
     return jsonify([dict(row) for row in d.fetchall()])
 
 @app.route('/ajax/getimages/<int:place_id>')
 def get_images(place_id):
-    query = "select imgurl from place_images where place_id = :place_id order by 1"
-    d = sql(query, {'place_id': place_id})
+    mod = __import__('sql_' + inspect.stack()[0][3] , fromlist=['sql_' + inspect.stack()[0][3]])
+    d = sql(mod.query, {'place_id': place_id})
     return jsonify([dict(row) for row in d.fetchall()])
 
 
@@ -140,21 +142,20 @@ def place_list(locaval, cateval):
 @app.route('/ajax/namesearch/<search_str>')
 def search_list(search_str):
     mod = __import__('sql_' + inspect.stack()[0][3] , fromlist=['sql_' + inspect.stack()[0][3]])
-    d = sql(mod.query)
+    d = sql(mod.query, {'search_str': search_str})
     return jsonify([dict(row) for row in d.fetchall()])
 
 @app.route('/ajax/getnames/<location>/<category>')
 def get_cateloca_names(location,category):
+    mod = __import__('sql_' + inspect.stack()[0][3] , fromlist=['sql_' + inspect.stack()[0][3]])
     if location == "None":
         locaname = "미지정"
     else:
-        query = "with recursive t as \
-		(select * from addrcodes where addrid = :location union all select a.* from addrcodes a, t where a.addrid = t.upaddr ) \
-		select string_agg(addrname,' ') from (select * from t order by addrid) a"
+        query = mod.loca_query
         res = sql(query, {'location': location})
         locaname = res.fetchone()[0];
 
-    query = "with recursive t as (select * from tourism where tourid = :category union all select a.* from tourism a, t where a.tourid = t.uptour ) select string_agg(tourname,' > ') from (select * from t order by tourid) a"
+    query = mod.cate_query
     res = sql(query, {'category': category})
     catename = res.fetchone()[0];
     return jsonify(catename=catename,locaname=locaname);
