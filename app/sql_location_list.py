@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 query = """
 select column1 as addrid , column2 as addrname 
 from (values 
