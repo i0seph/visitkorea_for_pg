@@ -7,7 +7,7 @@ import re
 #reload(sys)
 #sys.setdefaultencoding('utf-8')
 
-
+# usage: nt2pgcopy.py ntfile_name pgfile_name
 #print ('test str.encode(\\u0259').decode('unicode-escape'))
 
 fh = open(sys.argv[1],'r')
