@@ -24,7 +24,7 @@ import inspect
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = '9b1780f7bce9960bfefc34f0d52f0690'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres@localhost:5432/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@pg14:5432/postgres'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -99,50 +99,37 @@ def random_list():
     d = sql(mod.query)
     return jsonify([dict(row) for row in d.fetchall()])
 
+@app.route('/ajax/gettodayfesta/')
+def festa_list():
+    mod = __import__('sql_' + inspect.stack()[0][3] , fromlist=['sql_' + inspect.stack()[0][3]])
+    d = sql(mod.query)
+    return jsonify([dict(row) for row in d.fetchall()])
+
 @app.route('/ajax/list/<locaval>/<cateval>')
 def place_list(locaval, cateval):
+    mod = __import__('sql_' + inspect.stack()[0][3] , fromlist=['sql_' + inspect.stack()[0][3]])
     if (locaval == "all" and cateval == "all"):
         return random_list()
     elif locaval == "all":
-        query = "select distinct a.place_id, a.place_name, first_value(c.imgurl) over (partition by a.place_id) as imgurl \
-			from place a, (select place_id from place where cate in \
-			(with recursive t as (select * from tourism where uptour = any(:catestr) \
-			union all select a.* from tourism a, t where a.uptour = t.tourid) select tourid from t where length(tourid) = 9) order by place_name limit 50) b \
-		    left join place_images c on b.place_id = c.place_id where a.place_id = b.place_id"
         catestr = cateval.split(",")
-        d = sql(query, {'catestr': catestr})
+        d = sql(mod.all_loca_query, {'catestr': catestr})
     elif cateval == "all":
-        query = "select distinct a.place_id, a.place_name, first_value(c.imgurl) over (partition by a.place_id) as imgurl \
-			from place a, (select place_id from place where loca in \
-			(select addrid from addrcodes where upaddr = any(:locastr)) order by place_name limit 50) b \
-		    left join place_images c on b.place_id = c.place_id where a.place_id = b.place_id"
         locastr = locaval.split(",")
-        d = sql(query, {'locastr': locastr})
+        d = sql(mod.all_cate_query, {'locastr': locastr})
     else:
         if locaval == "undefind":
-            query = "select distinct a.place_id, a.place_name, first_value(c.imgurl) over (partition by a.place_id) as imgurl \
-		    from place a, (select place_id from place where loca is null and cate in (\
-	    (with recursive t as (select * from tourism where uptour = any(:catestr) \
-            union all select a.* from tourism a, t where a.uptour = t.tourid) select tourid from t where length(tourid) = 9)) order by place_name limit 50) b \
-            left join place_images c on b.place_id = c.place_id where a.place_id = b.place_id"
             catestr = cateval.split(",")
-            d = sql(query, {'catestr': catestr})
+            d = sql(mod.undefind_loca_query, {'catestr': catestr})
         else:
-            query = "select distinct a.place_id, a.place_name, first_value(c.imgurl) over (partition by a.place_id) as imgurl \
-		    from place a, (select place_id from place where loca in \
-            (select addrid from addrcodes where upaddr = any(:locastr) and cate in \
-	    (with recursive t as (select * from tourism where uptour = any(:catestr) \
-            union all select a.* from tourism a, t where a.uptour = t.tourid) select tourid from t where length(tourid) = 9)) order by place_name limit 50) b \
-            left join place_images c on b.place_id = c.place_id where a.place_id = b.place_id"
             locastr = locaval.split(",")
             catestr = cateval.split(",")
-            d = sql(query, {'locastr': locastr, 'catestr': catestr})
+            d = sql(mod.sub_loca_cate_query, {'locastr': locastr, 'catestr': catestr})
     return jsonify([dict(row) for row in d.fetchall()])
 
 @app.route('/ajax/namesearch/<search_str>')
 def search_list(search_str):
     mod = __import__('sql_' + inspect.stack()[0][3] , fromlist=['sql_' + inspect.stack()[0][3]])
-    d = sql(mod.query, {'search_str': search_str})
+    d = sql(mod.query, {'search_str': '%' + search_str + '%'})
     return jsonify([dict(row) for row in d.fetchall()])
 
 @app.route('/ajax/getnames/<location>/<category>')
@@ -162,12 +149,8 @@ def get_cateloca_names(location,category):
 
 @app.route('/ajax/near/<place_id>/<x>/<y>')
 def near_list(place_id, x,y):
-    query = "select distinct a.place_id, a.place_name, d.tourname, first_value(c.imgurl) over (partition by a.place_id) as imgurl, b.distance as distance \
-    from place a, ( \
-    select place_id, round((earth_distance(position, ll_to_earth(:y1,:x1))::numeric / 1000)::numeric, 2)::float as distance from place a \
-    where earth_box(ll_to_earth(:y1,:x1), 2000) @> position and a.place_id <> :place_id \
-    ) b left join place_images c on b.place_id = c.place_id, tourism d where a.place_id = b.place_id and d.tourid = substring(a.cate, 1, 3) order by 3, 5"
-    d = sql(query, {'place_id': place_id, 'x1': x, 'y1': y})
+    mod = __import__('sql_' + inspect.stack()[0][3] , fromlist=['sql_' + inspect.stack()[0][3]])
+    d = sql(mod.query, {'place_id': place_id, 'x1': x, 'y1': y})
     return jsonify([dict(row) for row in d.fetchall()])
 
 if __name__ == '__main__':

@@ -9,6 +9,28 @@
 {% endblock %}
 {% block placelist %}
 <div>여기 어때요?</div>
+<div style='clear: both'></div>
+<div id='map' style='width: 800px; height: 600px; border: 0px solid red'></div>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8145890c387467213cfd472a9a98d880"></script>
+<script>
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+    mapOption = {
+        center: new daum.maps.LatLng(35.854947, 127.827595),
+        level: 13 // 지도의 확대 레벨
+    };
+
+// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+var map = new daum.maps.Map(mapContainer, mapOption);
+var zoomControl = new daum.maps.ZoomControl();
+map.addControl(zoomControl, daum.maps.ControlPosition.RIGHT);
+</script>
+<div style='clear: both'></div>
+<div id='festalist'>
+<div>오늘은 여기로!</div>
+<ul>
+</ul>
+</div>
 <ul id='placelist'>
 </ul>
 {% endblock %}

@@ -28,12 +28,22 @@ function click_navi(){
 	$.ajax({
 		url:'/ajax/list/' + locaval + "/" + cateval,
 		success:function(data){
-			$("#placelist").empty();
-			$.each(data, function(num, row){
-				if(! row.imgurl) imgurl = "http://api.visitkorea.or.kr/static/images/common/noImage.gif";
-				else imgurl = row.imgurl;
-				$("#placelist").append("<li onclick='self.location.href=\"/place/" + row.place_id + "\"'>" + row.place_name + "<br />" + "<img src=" + imgurl + " height='128' />"+ "</li>");
-			});
+			if(locaval == "all" && cateval == "all"){
+				$("#map").show();
+				$("#festalist").show();
+				$("#placelist").empty();
+				display_festalist();
+			}
+			else {
+				$("#map").hide();
+				$("#placelist").empty();
+				$("#festalist").hide();
+				$.each(data, function(num, row){
+					if(! row.imgurl) imgurl = "http://api.visitkorea.or.kr/static/images/common/noImage.gif";
+					else imgurl = row.imgurl;
+					$("#placelist").append("<li onclick='self.location.href=\"/place/" + row.place_id + "\"'>" + row.place_name + "<br />" + "<img src=" + imgurl + " height='128' />"+ "</li>");
+				});
+			}
 		}
 	});
 }
@@ -95,9 +105,33 @@ function display_randomlist(){
 		success:function(data){
 			$("#placelist").empty();
 			$.each(data, function(num, row){
+/*
 				if(! row.imgurl) imgurl = "http://api.visitkorea.or.kr/static/images/common/noImage.gif";
 				else imgurl = row.imgurl;
 				$("#placelist").append("<li onclick='self.location.href=\"/place/" + row.place_id + "\"'>" + row.place_name + "<br />" + "<img src=" + imgurl + " height='128' />"+ "</li>");
+*/
+
+var markerPosition  = new daum.maps.LatLng(row.lat, row.long);
+var infowindow = new kakao.maps.InfoWindow({
+    map: map,
+    position : markerPosition, 
+    content : "<div onclick='self.location.href=\"/place/" + row.place_id + "\"' style='cursor: pointer'>" + row.place_name + "</div>",
+    removable : false
+});
+			});
+
+		}
+	});
+}
+
+function display_festalist(){
+	$.ajax({
+		url:'/ajax/gettodayfesta/',
+		success:function(data){
+			$("#festalist").show();
+			$("#festalist ul").empty();
+			$.each(data, function(num, row){
+				$("#festalist ul").append("<li onclick='self.location.href=\"/place/" + row.place_id + "\"'>" + row.place_name + "</li>");
 			});
 
 		}
@@ -108,22 +142,24 @@ function startpage(){
 	display_location();
 	display_category();
 	display_randomlist();
+	display_festalist();
 	$("#input_search").keypress(function(e) {
 		if (e.keyCode == 13){
+			$.ajax({
+				url:'/ajax/namesearch/' + $("#input_search").val(),
+				success:function(data){
+					$("#map").hide();
+					$("#festalist").hide();
+					$("#placelist").empty();
+					$.each(data, function(num, row){
+						if(! row.imgurl) imgurl = "http://api.visitkorea.or.kr/static/images/common/noImage.gif";
+						else imgurl = row.imgurl;
+						$("#placelist").append("<li onclick='self.location.href=\"/place/" + row.place_id + "\"'>" + row.place_name + "<br />" + "<img src=" + imgurl + " height='128' />"+ "</li>");
 
-	$.ajax({
-		url:'/ajax/namesearch/' + $("#input_search").val(),
-		success:function(data){
-			$("#placelist").empty();
-			$.each(data, function(num, row){
-				if(! row.imgurl) imgurl = "http://api.visitkorea.or.kr/static/images/common/noImage.gif";
-				else imgurl = row.imgurl;
-				$("#placelist").append("<li onclick='self.location.href=\"/place/" + row.place_id + "\"'>" + row.place_name + "<br />" + "<img src=" + imgurl + " height='128' />"+ "</li>");
+
+					});
+				}
 			});
-
-		}
-	});
-
 		}    
 	});
 }

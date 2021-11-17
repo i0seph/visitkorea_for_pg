@@ -9,8 +9,9 @@
 	margin-right: 10px;
 }
 
-#placelist li {
+#placelist li, #festalist li {
 	cursor: pointer;
+	list-style: none;
 }
 
 #placedl {
