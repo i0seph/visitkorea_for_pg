@@ -10,9 +10,9 @@ with i as (
   from (
     select place_id, imgurl
     from place_images
-    tablesample bernoulli (1) limit 20
+    tablesample bernoulli (0.05) limit 20
   ) a
-  order by place_id limit 10
+  order by place_id, imgurl limit 10
 )
 select p.place_id, p.place_name as place_name, i.imgurl, p.long, p.lat
 from place p, i
