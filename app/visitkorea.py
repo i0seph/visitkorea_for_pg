@@ -76,6 +76,11 @@ def get_images(place_id):
     d = sql(mod.query, {'place_id': place_id})
     return jsonify([dict(row) for row in d.fetchall()])
 
+@app.route('/ajax/getlinks/<int:place_id>')
+def get_links(place_id):
+    mod = __import__('sql_' + inspect.stack()[0][3] , fromlist=['sql_' + inspect.stack()[0][3]])
+    d = sql(mod.query, {'place_id': place_id})
+    return jsonify([dict(row) for row in d.fetchall()])
 
 @app.route('/ajax/location')
 @app.route('/ajax/location/')

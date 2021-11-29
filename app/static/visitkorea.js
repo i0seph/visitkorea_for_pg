@@ -200,6 +200,21 @@ function startplace(place_id, x, y){
 	});
 
 	$.ajax({
+		url:'/ajax/getlinks/' +  place_id,
+		success:function(data){
+			if(data.length > 0) {
+                            listr = "<ul>";
+			    $.each(data, function(num, row){
+				listr = listr + "<li><a href='" + row.linkurl + "'>" + row.linkurl + "</a></li>";
+			    });
+                            listr = listr + "</ul>";
+                            $("#placedl").append("<dt>관련 링크</dt><dd>" + listr + "</dd>");
+                        }
+		}
+	});
+
+
+	$.ajax({
 		url:'/ajax/near/' + place_id + '/' +  x + '/' + y,
 		success:function(data){
 			$.each(data, function(num, row){
