@@ -14,7 +14,7 @@ with i as (
   ) a
   order by place_id, imgurl limit 10
 )
-select p.place_id, p.place_name as place_name, i.imgurl, p.long, p.lat
+select p.place_id, p.place_name as place_name, i.imgurl, p.long::float, p.lat::float
 from place p, i
 where p.place_id = i.place_id
 """

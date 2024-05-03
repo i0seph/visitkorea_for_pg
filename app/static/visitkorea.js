@@ -39,7 +39,7 @@ function click_navi(){
 				$("#placelist").empty();
 				$("#festalist").hide();
 				$.each(data, function(num, row){
-					if(! row.imgurl) imgurl = "http://api.visitkorea.or.kr/static/images/common/noImage.gif";
+					if(! row.imgurl) imgurl = "/static/noImage.gif";
 					else imgurl = row.imgurl;
 					$("#placelist").append("<li onclick='self.location.href=\"/place/" + row.place_id + "\"'>" + row.place_name + "<br />" + "<img src=" + imgurl + " height='128' />"+ "</li>");
 				});
@@ -106,7 +106,7 @@ function display_randomlist(){
 			$("#placelist").empty();
 			$.each(data, function(num, row){
 /*
-				if(! row.imgurl) imgurl = "http://api.visitkorea.or.kr/static/images/common/noImage.gif";
+				if(! row.imgurl) imgurl = "/static/noImage.gif";
 				else imgurl = row.imgurl;
 				$("#placelist").append("<li onclick='self.location.href=\"/place/" + row.place_id + "\"'>" + row.place_name + "<br />" + "<img src=" + imgurl + " height='128' />"+ "</li>");
 */
@@ -152,7 +152,7 @@ function startpage(){
 					$("#festalist").hide();
 					$("#placelist").empty();
 					$.each(data, function(num, row){
-						if(! row.imgurl) imgurl = "http://api.visitkorea.or.kr/static/images/common/noImage.gif";
+						if(! row.imgurl) imgurl = "/static/noImage.gif";
 						else imgurl = row.imgurl;
 						$("#placelist").append("<li onclick='self.location.href=\"/place/" + row.place_id + "\"'>" + row.place_name + "<br />" + "<img src=" + imgurl + " height='128' />"+ "</li>");
 
@@ -218,7 +218,7 @@ function startplace(place_id, x, y){
 		url:'/ajax/near/' + place_id + '/' +  x + '/' + y,
 		success:function(data){
 			$.each(data, function(num, row){
-				if(! row.imgurl) imgurl = "http://api.visitkorea.or.kr/static/images/common/noImage.gif";
+				if(! row.imgurl) imgurl = "/static/noImage.gif";
 				else imgurl = row.imgurl;
 				$("#nearlist").append("<div onclick='self.location.href=\"/place/" + row.place_id + "\"'>[" + row.tourname + '] ' + row.place_name + "(" + row.distance + "km)<br />" + "<img src=" + imgurl + " height='128' />"+ "</div>");
 
